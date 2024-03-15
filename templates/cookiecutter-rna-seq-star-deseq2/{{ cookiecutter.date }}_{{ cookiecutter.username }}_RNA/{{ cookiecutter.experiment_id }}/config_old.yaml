@@ -1,0 +1,55 @@
+# path or URL to sample sheet (TSV format, columns: sample, condition, ...)
+samples: samples.tsv
+# path or URL to sequencing unit sheet (TSV format, columns: sample, unit, fq1, fq2,
+# strandedness). Units are technical replicates (e.g. lanes, or resequencing of the
+# same biological sample).If the column "strandedness" is present (which is optional),
+# can be empty or has one of these values: none, yes or reverse. none is for unstranded
+# protocols, yes an reverse follow the nomenclature used in `htseq-count --reverse`
+# which is referenced in STAR manual section 7, "Counting number of reads per gene".
+
+units: units.tsv
+
+trackhub:
+  name: "{{ cookiecutter.username }}"
+
+# information about this workflow
+workflow:
+  name: "{{ cookiecutter.workflow_name }}"
+  username: "{{ cookiecutter.username }}"
+  version:
+    number: "1.1.0"
+    date: "{{ cookiecutter.date }}"
+
+reads:
+  path: "resources/reads"
+
+trimming:
+  # skip trimming: false or true
+  skip: false
+  # This adapter sequence will be removed from the 3' end of forward and reverse reads
+  adapter: CTGTCTCTTATACACATCT
+
+ref:
+  organism: {{ cookiecutter.ref_organism.replace(' ','_') }}
+  provider: {{ cookiecutter.ref_provider }}
+  version: {{ cookiecutter.ref_version }}
+
+pca:
+  labels:
+    # columns of sample sheet to use for PCA
+    - condition
+
+diffexp:
+  # contrasts for the deseq2 results method
+  # add them as change_group-vs-control_group
+  contrasts:
+
+params:
+  star: ""
+  cutadapt-se: "-g AGATGTGTATAAGAGACAG"
+  # Specify additional adapters to be removed.
+  # Using -a with -A means that the adapter will be removed from the 3' end of
+  #   both forward and reverse reads.
+  # Using -g with -G means that the adapter will be removed from the 5' end of
+  #   both forward and reverse reads.
+  cutadapt-pe: "-g AGATGTGTATAAGAGACAG -G AGATGTGTATAAGAGACAG"

@@ -1,0 +1,1 @@
+The `RSeQC <http://rseqc.sourceforge.net/>`_ program was run during the analysis. The various QC metrics and graphs it produced were compiled into an interactive `MultiQC <https://multiqc.info/>`_ report.

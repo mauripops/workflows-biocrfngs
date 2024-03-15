@@ -1,0 +1,105 @@
+samples: config/samples.tsv
+units: config/units.tsv
+
+
+workflow:
+  name: "{{ cookiecutter.workflow_name }}"
+  username: "{{ cookiecutter.username }}"
+  version:
+    number: "1.0"
+    date: "{{ cookiecutter.date }}"
+
+platform: "{{ cookiecutter.platform }}"
+
+ref:
+  species: {{ cookiecutter.ref_species.replace(' ','_') }}
+  build: {{ cookiecutter.ref_build }}
+  release: {{ cookiecutter.ref_release }}
+  provider:  {{ cookiecutter.ref_provider }}
+
+#at the moment this are kept separate because they affect the wildcards but I will eventually need to change that
+filtering:
+  # Set to true in order to apply machine learning based recalibration of
+  # quality scores instead of hard filtering.
+  vqsr: false
+  hard:
+    # hard filtering as outlined in GATK docs
+    # (https://gatkforums.broadinstitute.org/gatk/discussion/2806/howto-apply-hard-filters-to-a-call-set)
+    snvs:
+      "QD < 2.0 || FS > 60.0 || MQ < 40.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0"
+    indels:
+      "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0"
+
+
+processing:
+  remove-duplicates: true
+  # Uncomment and point to a bed file with, e.g., captured regions if necessary,
+  # see https://gatkforums.broadinstitute.org/gatk/discussion/4133/when-should-i-use-l-to-pass-in-a-list-of-intervals.
+  # restrict-regions: captured_regions.bed
+  # If regions are restricted, uncomment this to enlarge them by the given value in order to include
+  # flanking areas.
+  # region-padding: 100
+
+params:
+  gatk:
+    HaplotypeCaller:
+      extra: ""
+      java: ""
+    BaseRecalibrator:
+      # not --intervals, --interval-padding already
+      # called at get_regions_param() in extra
+      extra: ""
+      java: ""
+    ApplyBaseQualityRecalibrator:
+      # not --intervals, --interval-padding already
+      # called from get_regions_param() in extra
+      extra: "" 
+      java: ""
+    GenotypeGVCFs:
+      extra: ""
+      java: ""
+    VariantRecalibrator:
+      extra: ""
+      java: ""
+    SelectVariants:
+      # not --select-type-to-include already
+      # called from get_vartype_arg() in extra
+      extra: ""
+      java: ""
+    HardFiltering:
+    # snv-hard-filter already called check [filtering: hard] above
+      extra: ""
+      java: ""
+    CombineGvcfs:
+      extra: ""
+      java: ""
+  picard:
+    MarkDuplicates: 
+      extra: "--REMOVE_DUPLICATES true  --ASSUME_SORT_ORDER coordinate"
+      java: "-XX:ParallelGCThreads=4"
+    MergeVcfs:
+      merge_calls: ""
+      merge_variants: ""
+  trimming:
+    #skip trimming true of false
+    #skip: false [NOT implemented, do so by editing map_reads func]
+    # Specify additional adapters to be removed.
+    # Using -a with -A means that the adapter will be removed from the 3' end of
+    #   both forward and reverse reads.
+    # Using -g with -G means that the adapter will be removed from the 5' end of
+    #   both forward and reverse reads.
+    adapter-a: "AAGTCGGATCGTAGCCATGTCGTTCTGTGAGCCAAGGAGTTG"
+    adapter-g: "AAGTCGGAGGCCAAGCGGTCTTAGGAAGACAA"
+    extra-pe: "--minimum-length=30 -a A\\{100\\} -A A\\{100\\}"
+    extra-se: "--minimum-length=35 -a A\\{100\\}"
+  mapping:
+    # this for bwa-mem2 currently
+    extra: ""
+  
+  vep:
+    plugins:
+      # Add any plugin from https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
+      # Plugin args can be passed as well, e.g. "LoFtool,path/to/custom/scores.txt".
+      - LoFtool
+    # extra command line arguments (e.g. --sift, see docs)
+    extra: ""

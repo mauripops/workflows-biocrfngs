@@ -1,0 +1,7 @@
+channels:
+  - bioconda
+dependencies:
+  - bedtools=2.26.0
+  - samtools=1.5
+  - ucsc-bedclip=332
+  - mysqlclient=1.3.10

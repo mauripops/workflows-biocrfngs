@@ -1,0 +1,19 @@
+{
+    "workflow_name": "dna-seq-gatk-variant-calling",
+    "date": "{% now 'utc', '%Y-%m-%d' %}",
+    "_extensions": ["jinja2_time.TimeExtension"],
+    "username": "Ginny",
+    "experiment_id": "A",
+    "platform": "ILLUMINA",
+    "sample_sheet": "/data2/biocrfngs/workflows-biocrfngs/sample_sheets/dna_seq_gatk_varian_calling_example.tsv",
+    "ref_species": ["Mus musculus","Homo sapiens","Caenorhabditis elegans","Danio_rerio"],
+    "ref_provider": "ensembl",
+    "ref_build": "GRCm39",
+    "ref_release": 111,
+    "_copy_without_render": [
+        "*.rst",
+        "*.py",
+        "Snakefile",
+        "*.smk"
+    ]
+}

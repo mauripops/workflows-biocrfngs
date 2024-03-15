@@ -1,0 +1,8 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - python =3.8
+  - matplotlib =3.2
+  - pandas =2.0
+  - seaborn =0.12

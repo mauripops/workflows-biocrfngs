@@ -1,0 +1,7 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - trackhub=0.2.4
+  - pandas=1.1.1
+  - seaborn=0.11.0

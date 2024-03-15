@@ -1,0 +1,4 @@
+WorkflowError in file /data1/mauriciog/biocrf_pipeline/dna-seq-gatk-variant-calling/workflow/rules/common.smk, line 15:
+Workflow defines configfile config/config.yaml but it is not present or accessible (full checked path: /data1/mauriciog/biocrf_pipeline/dna-seq-gatk-variant-calling/workflow/config/config.yaml).
+  File "/data1/mauriciog/biocrf_pipeline/dna-seq-gatk-variant-calling/workflow/Snakefile", line 1, in <module>
+  File "/data1/mauriciog/biocrf_pipeline/dna-seq-gatk-variant-calling/workflow/rules/common.smk", line 15, in <module>

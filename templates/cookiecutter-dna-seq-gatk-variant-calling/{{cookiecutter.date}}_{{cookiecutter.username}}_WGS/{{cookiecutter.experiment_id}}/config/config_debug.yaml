@@ -1,0 +1,69 @@
+samples: config/samples.tsv
+units: config/units.tsv
+
+
+#NOTE no trackhub for cookie-cutter
+
+workflow:
+  name: "debug"
+  username: "mau"
+  version:
+    number: "1.0"
+    date: "do"
+
+####To edit again once I have to cookiecutter
+#NOTE provider is ensembl for this pipeline. More details at:
+# /data2/biocrfngs/reference_genomes/snakemake_wrapper_ref.smk
+ref:
+  species: "Mus_musculus"
+  build: "GRCm39"
+  release: "111"
+
+
+filtering:
+  # Set to true in order to apply machine learning based recalibration of
+  # quality scores instead of hard filtering.
+  vqsr: false
+  hard:
+    # hard filtering as outlined in GATK docs
+    # (https://gatkforums.broadinstitute.org/gatk/discussion/2806/howto-apply-hard-filters-to-a-call-set)
+    snvs:
+      "QD < 2.0 || FS > 60.0 || MQ < 40.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0"
+    indels:
+      "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0"
+
+processing:
+  remove-duplicates: true
+  # Uncomment and point to a bed file with, e.g., captured regions if necessary,
+  # see https://gatkforums.broadinstitute.org/gatk/discussion/4133/when-should-i-use-l-to-pass-in-a-list-of-intervals.
+  # restrict-regions: captured_regions.bed
+  # If regions are restricted, uncomment this to enlarge them by the given value in order to include
+  # flanking areas.
+  # region-padding: 100
+
+params:
+  gatk:
+    HaplotypeCaller: ""
+    BaseRecalibrator: ""
+    GenotypeGVCFs: ""
+    VariantRecalibrator: ""
+  picard:
+    MarkDuplicates: "REMOVE_DUPLICATES=true"
+  trimming:
+    #skip trimming true of false
+    #skip: false [NOT implemented, do so by editing map_reads func]
+    # Specify additional adapters to be removed.
+    # Using -a with -A means that the adapter will be removed from the 3' end of
+    #   both forward and reverse reads.
+    # Using -g with -G means that the adapter will be removed from the 5' end of
+    #   both forward and reverse reads.
+    adapter-a: "AAGTCGGATCGTAGCCATGTCGTTCTGTGAGCCAAGGAGTTG"
+    adapter-g: "AAGTCGGAGGCCAAGCGGTCTTAGGAAGACAA"
+
+  vep:
+    plugins:
+      # Add any plugin from https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html
+      # Plugin args can be passed as well, e.g. "LoFtool,path/to/custom/scores.txt".
+      - LoFtool
+    # extra command line arguments (e.g. --sift, see docs)
+    extra: ""

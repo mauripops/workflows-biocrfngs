@@ -1,0 +1,14 @@
+restart-times: 1
+rerun-incomplete: true
+jobscript: "slurm-jobscript.sh"
+cluster: "slurm-submit.py"
+cluster-status: "slurm-status.py"
+max-jobs-per-second: 4
+max-status-checks-per-second: 8
+local-cores: 2
+jobs: 120
+use-conda: true
+conda-prefix: "~/.snakemake_envs"
+# timestamp: true
+printshellcmds: true
+latency-wait: 60

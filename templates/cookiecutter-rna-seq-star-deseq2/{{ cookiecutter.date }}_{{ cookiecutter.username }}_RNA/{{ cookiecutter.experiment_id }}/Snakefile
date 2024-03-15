@@ -1,0 +1,67 @@
+import pandas as pd
+from snakemake.utils import validate, min_version
+##### set minimum snakemake version #####
+min_version("5.1.2")
+
+
+##### load config and sample sheets #####
+
+configfile: "config.yaml"
+validate(config, schema="schemas/config.schema.yaml")
+config["ref"]["index"] = "resources/{organism}/{provider}/{version}/Sequence/STARIndex".format(organism=config["ref"]["organism"], provider=config["ref"]["provider"], version=config["ref"]["version"])
+config["ref"]["annotation"] = "resources/{organism}/{provider}/{version}/Annotation/Genes/genes.gtf".format(organism=config["ref"]["organism"], provider=config["ref"]["provider"], version=config["ref"]["version"])
+config["ref"]["organism_label"] = config["ref"]["organism"].replace("_"," ")
+
+samples = pd.read_table(config["samples"]).set_index("sample", drop=False)
+validate(samples, schema="schemas/samples.schema.yaml")
+
+def fq_converter(fastq_file):
+    return "{0}/{1}".format(config["reads"]["path"], fastq_file)
+
+units = pd.read_table(config["units"], dtype=str, converters={'fq1': fq_converter, 'fq2': fq_converter}).set_index(["sample", "unit"], drop=False)
+units.index = units.index.set_levels([i.astype(str) for i in units.index.levels])  # enforce str in index
+validate(units, schema="schemas/units.schema.yaml")
+
+# Constrain the various wildcards to help with any rule ambiguities
+wildcard_constraints:
+    sample="|".join(set(units['sample'].tolist())),
+    unit="|".join(set(units['unit'].tolist())),
+    contrast="|".join(set(config["diffexp"]["contrasts"]))
+
+##### target rules #####
+
+rule all:
+    input:
+        expand(["results/diffexp/{contrast}.diffexp.tsv",
+                "results/diffexp/{contrast}.ma-plot.svg"],
+               contrast=config["diffexp"]["contrasts"]),
+        # "results/trackhub/{hub_name}.hub.txt".format(hub_name=config["trackhub"]["name"]),
+        "results/pca.svg",
+        "results/qc/multiqc_report.html"
+
+##### setup report #####
+
+report: "report/workflow.rst"
+
+rule report:
+    """
+    Specify the output files we want to show up in the report workflow graph.
+    """
+    input:
+        expand(["results/diffexp/{contrast}.diffexp.tsv",
+                "results/diffexp/{contrast}.ma-plot.svg"],
+               contrast=config["diffexp"]["contrasts"]),
+        "results/pca.svg",
+        "results/qc/multiqc_report.html"
+
+##### load rules #####
+
+include: "rules/common.smk"
+include: "rules/trim.smk"
+include: "rules/align.smk"
+include: "rules/diffexp.smk"
+include: "rules/qc.smk"
+# include: "rules/trackhub.smk"
+include: "rules/targets.smk"
+include: "rules/transfer.smk"
+include: "rules/download.smk"
