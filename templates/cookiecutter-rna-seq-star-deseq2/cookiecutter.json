@@ -2,29 +2,11 @@
     "workflow_name": "rna-seq-star-deseq2",
     "date": "{% now 'utc', '%Y-%m-%d' %}",
     "_extensions": ["jinja2_time.TimeExtension"],
-    "sequencing_folder": "V300081210",
-    "username": "Kit",
-    "user_id": 2,
+    "sequencing_folder": "E200007827",
+    "username": "Ginny",
+    "user_id": 1,
     "experiment_id": "A",
-    "sample_sheet": "/data2/biocrfngs/workflows-biocrfngs/sample_sheets/rna_seq_star_deseq2_example.tsv",
-    "reference_genomes": {
-        "mm10": {
-            "ref_organism": "Mus musculus",
-            "ref_provider": "UCSC"
-        },
-        "hg38": {
-            "ref_organism": "Homo sapiens",
-            "ref_provider": "UCSC"
-        },
-        "ce10": {
-            "ref_organism": "Caenorhabditis elegans",
-            "ref_provider": "UCSC"
-        },
-        "danRer10": {
-            "ref_organism": "Danio_rerio",
-            "ref_provider": "UCSC"
-        }
-    },
+    "sample_sheet": "/data2/biocrfngs/workflows/workflows-biocrfngs/sample_sheets/rna_seq_star_deseq2_example.tsv",
     "ref_organism": ["Mus musculus","Homo sapiens","Caenorhabditis elegans","Danio_rerio"],
     "ref_provider": "UCSC",
     "ref_version": "mm10",
