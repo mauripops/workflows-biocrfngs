@@ -1,4 +1,4 @@
-restart-times: 0
+restart-times: 1
 rerun-incomplete: true
 jobscript: "slurm-jobscript.sh"
 cluster: "slurm-submit.py"
@@ -12,5 +12,3 @@ conda-prefix: "~/.snakemake_envs"
 # timestamp: true
 printshellcmds: true
 latency-wait: 60
-resources: 
-  - nodes=9
