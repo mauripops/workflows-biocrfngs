@@ -4,7 +4,7 @@
     "_extensions": ["jinja2_time.TimeExtension"],
     "username": "Ginny",
     "experiment_id": "A",
-    "platform": "MGI",
+    "platform": "DNBSEQ",
     "sample_sheet": "/data2/biocrfngs/workflows/workflows-biocrfngs/sample_sheets/dna_seq_gatk_varian_calling_example.tsv",
     "ref_species": ["Mus musculus","Homo sapiens","Caenorhabditis elegans","Danio_rerio"],
     "ref_provider": "ensembl",

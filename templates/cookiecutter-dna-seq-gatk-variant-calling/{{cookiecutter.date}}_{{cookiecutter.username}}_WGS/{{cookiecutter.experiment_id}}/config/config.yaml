@@ -17,7 +17,6 @@ ref:
   release: {{ cookiecutter.ref_release }}
   provider:  {{ cookiecutter.ref_provider }}
 
-#at the moment this are kept separate because they affect the wildcards but I will eventually need to change that
 filtering:
   # Set to true in order to apply machine learning based recalibration of
   # quality scores instead of hard filtering.
@@ -94,8 +93,7 @@ params:
     extra-se: "--minimum-length=35 -a A\\{100\\}"
   mapping:
     # this for bwa-mem2 currently
-    extra: ""
-  
+    extra: ""  
   vep:
     plugins:
       # Add any plugin from https://www.ensembl.org/info/docs/tools/vep/script/vep_plugins.html

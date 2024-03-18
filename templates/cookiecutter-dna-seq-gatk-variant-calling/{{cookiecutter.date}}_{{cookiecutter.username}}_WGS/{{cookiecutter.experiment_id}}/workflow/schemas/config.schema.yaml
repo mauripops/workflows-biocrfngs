@@ -9,7 +9,10 @@ properties:
     type: string
   units:
     type: string
-
+  platform:
+    type: string
+    enum: ["DNBSEQ","CAPILLARY", "LS454", "ILLUMINA", "SOLID", "HELICOS", "IONTORRENT", "ONT", "PACBIO"]
+  
   ref:
     type: object
     properties:
@@ -19,10 +22,13 @@ properties:
         type: string
       release:
         type: integer
+      provider:
+        type: string
     required:
       - species
       - build
       - release
+      - provider
 
   filtering:
     type: object
@@ -62,33 +68,138 @@ properties:
         type: object
         properties:
           HaplotypeCaller:
-            type: string
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
           BaseRecalibrator:
-            type: string
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
+          ApplyBaseQualityRecalibrator:
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
           GenotypeGVCFs:
-            type: string
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
           VariantRecalibrator:
-            type: string
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
+          SelectVariants:
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
+          HardFiltering:
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
+          CombineGvcfs:
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
         required:
           - HaplotypeCaller
           - BaseRecalibrator
+          - ApplyBaseQualityRecalibrator
           - GenotypeGVCFs
           - VariantRecalibrator
+          - SelectVariants
+          - HardFiltering
+          - CombineGvcfs
       picard:
         type: object
         properties:
           MarkDuplicates:
-            type: string
+            type: object
+            properties:
+              extra:
+                type: string
+              java:
+                type: string
+          MergeVcfs:
+            type: object
+            properties:
+              merge_calls:
+                type: string
+              merge_variants:
+                type: string
         required:
           - MarkDuplicates
+          - MergeVcfs
+      trimming:
+        type: object
+        properties:
+          adapter-a:
+            type: string
+          adapter-g:
+            type: string
+          extra-pe:
+            type: string
+          extra-se:
+            type: string
+        required:
+          - adapter-a
+          - adapter-g
+          - extra-se
+          - extra-pe
+      mapping:
+        type: object
+        properties:
+          extra:
+            type: string
+        required:
+          - extra
+      vep:
+        type: object
+        properties:
+          plugins:
+            type: array
+            items:
+              type: string
+          extra:
+            type: string
+        required:
+          - plugins
+          - extra
     required:
       - gatk
       - picard
+      - trimming
+      - mapping
+      - vep
 
 required:
   - samples
   - units
+  - platform
   - ref
   - filtering
   - processing
   - params
+
