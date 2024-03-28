@@ -42,7 +42,7 @@ processing:
 params:
   gatk:
     HaplotypeCaller:
-      extra: ""
+      extra: "--min-base-quality-score 10 --minimum-mapping-quality 10"
       java: ""
     BaseRecalibrator:
       # not --intervals, --interval-padding already
