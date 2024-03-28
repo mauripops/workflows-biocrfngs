@@ -13,7 +13,7 @@ rule cutadapt_pe:
     threads: 40
     params:
         adapters="-a {0} -A {0} {1}".format(config["trimming"]["adapter"], config["params"]["cutadapt-pe"]),
-        extra="--minimum-length=30 -a A\{100\} -A A\{100\}"
+        extra="--minimum-length=30 --nextseq-trim=30 -a A\{100\} -A A\{100\}"
     resources:
         mem_mb=360000
 	# This is so that it only keeps a set of reads if both pairs are at least 20bp long
@@ -32,7 +32,7 @@ rule cutadapt:
     threads: 40
     params:
         adapters="-a {0} {1}".format(config["trimming"]["adapter"], config["params"]["cutadapt-se"]),
-        extra="--minimum-length=35 -a A\{100\}"
+        extra="--minimum-length=35 --nextseq-trim=30 -a A\{100\}"
     resources:
         mem_mb=360000
     log: "results/logs/cutadapt/{sample}-{unit}.log"

@@ -14,8 +14,8 @@ platform: "{{ cookiecutter.platform }}"
 ref:
   species: {{ cookiecutter.ref_species.replace(' ','_') }}
   build: {{ cookiecutter.ref_build }}
-  release: {{ cookiecutter.ref_release }}
-  provider:  {{ cookiecutter.ref_provider }}
+  release: 111
+  provider: ensembl #provider MUST be ensembl
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
@@ -89,8 +89,8 @@ params:
     #   both forward and reverse reads.
     adapter-a: "AAGTCGGATCGTAGCCATGTCGTTCTGTGAGCCAAGGAGTTG"
     adapter-g: "AAGTCGGAGGCCAAGCGGTCTTAGGAAGACAA"
-    extra-pe: "--minimum-length=30 -a A\\{100\\} -A A\\{100\\}"
-    extra-se: "--minimum-length=35 -a A\\{100\\}"
+    extra-pe: "--minimum-length=30 --nextseq-trim=20 -a A\\{100\\} -A A\\{100\\}"
+    extra-se: "--minimum-length=35 --nextseq-trim=20 -a A\\{100\\}"
   mapping:
     # this for bwa-mem2 currently
     extra: ""  
